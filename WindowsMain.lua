@@ -41,43 +41,10 @@ function onPoseEdge(pose, edge)
 	if pose == 'thumbToPinky' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
 		toggleMouse()
 	end
-
-	if pose == 'fist' then
-		if rollDefault == nil then
-			--Allow time for user to prepare for scroll
-			wait(200)
-			sampleRoll()
-		end
-		-- the user is about to start turning
-		-- if current roll is greater than default scroll up
-		if (myo.roll - rollDefault) > 0.5 then
-			myo.keyboard('down', press)
-			myo.debug('going down')
-		else if (myo.roll - rollDefault) < -0.5 then
-			myo.keyboard('up', press)
-			myo.debug('going up')
-		end
-	end
-	if pose == 'fist' and edge == 'off' then	
-		rollDefault = null
-		myo.debug('scrolling stopped')
-	end
-		
+	
 	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
 		mouseClick()
 	end
-end
-
-function sampleRoll()
-	myo.debug('sampling default roll')
-	--for 1 sec sample the roll and create a continuous average updating default 
-	rollSum = 0
-	rollNum = 25
-	for var = 0, rollNum - 1, 1, do
-		rollSum = rollSum + myo.roll()
-		wait(10)
-	end
-	rollDefault = rollSum / rollNum
 end
 
 function openChromeWin()
@@ -201,12 +168,7 @@ function navNetflixMac()
 end
 
 function toggleMouse()
-	if mControl == true then
-		mControl = false
-	else 
-		mControl = true
-	end	
-	
+	mControl = not mControl	
 	myo.controlMouse(mControl)
 	
 	if myo.mouseControlEnabled() then
