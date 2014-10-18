@@ -7,9 +7,9 @@ timer = 0;
 function onPeriodic()
 	timer++
 	if timer % 100 == 0 then
-		myo.debug('Roll:' + myo.getRoll())
-		myo.debug('Pitch:' + myo.getPitch())
-		myo.debug('Yaw:' + myo.getYaw())
+		myo.debug('Roll:' .. myo.getRoll())
+		myo.debug('Pitch:' .. myo.getPitch())
+		myo.debug('Yaw:' .. myo.getYaw())
 	end
 end
 
