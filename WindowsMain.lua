@@ -1,4 +1,4 @@
-scriptId = 'com.thalmic.jprange.displayinfo'
+scriptId = 'WindowsMain'
  --Specify OS for scripting dependencies format is either 'MacOS' or 'Windows'
 platform = 'Windows' 
 --platform = 'MacOS'
@@ -38,9 +38,10 @@ function onPoseEdge(pose, edge)
 	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
 		navNetflixMac()
 	end
-	if pose == 'thumbToPinky' then
+	if pose == 'thumbToPinky' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
 		toggleMouse()
 	end
+
 	if pose == 'fist' then
 		if rollDefault == nil then
 			--Allow time for user to prepare for scroll
@@ -60,6 +61,10 @@ function onPoseEdge(pose, edge)
 	if pose == 'fist' and edge == 'off' then	
 		rollDefault = null
 		myo.debug('scrolling stopped')
+	end
+		
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
+		mouseClick()
 	end
 end
 
@@ -96,7 +101,7 @@ function openChromeWin()
     	 myo.keyboard(c, "press") 
 	end
     myo.keyboard('return', "press")
-    myo.vibrate("medium")
+    myo.vibrate("short")
     wait(600)
    
     myo.debug('End openChrome()')
@@ -154,7 +159,7 @@ function navNetflixWin()
 	
     myo.keyboard('return', "press")
     wait(600)
-    myo.vibrate("medium")
+    myo.vibrate("short")
     
     currentAddress = 'www.netflix.com'
     wait(600)
@@ -199,7 +204,7 @@ function toggleMouse()
 	if mControl == true then
 		mControl = false
 	else 
-		mControl = true;
+		mControl = true
 	end	
 	
 	myo.controlMouse(mControl)
@@ -209,8 +214,14 @@ function toggleMouse()
 	else
 		myo.debug("mouse control is false")
 	end
-	myo.vibrate("medium")
-	--myo.centerMousePosition()
+	myo.vibrate("short")
+	
+end
+
+function mouseClick()
+	myo.mouse("left", "click")
+	myo.mouse("left", "click")
+	myo.debug("click called")
 end
 
 
