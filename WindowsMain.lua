@@ -5,11 +5,11 @@ platform = 'Windows'
 chromeOpen = false
 currentAddress = ''
 mControl = false
+state = ''
+
 myo.debug("\n\n Connection Successful: Begin Script " .. scriptId)  --my.debug() prints to console
-rollDefault = nil
 
 function onPeriodic()
-	
 end
 
 function onForegroundWindowChange(app, title)
@@ -26,23 +26,20 @@ function onActiveChange(isActive)
 end
 
 function onPoseEdge(pose, edge)
-	if pose == 'fist' and platform == 'Windows' and chromeOpen == false then
+	if pose == 'fist' and chromeOpen == false then
 		openChromeWin() 
 	end
-	if pose == 'fist' and platform == 'MacOS' and chromeOpen == false then
-		openChromeMac() 
-	end
-	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and  platform == 'Windows' then
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' then
 		navNetflixWin()
 	end
-	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
-		navNetflixMac()
-	end
-	if pose == 'thumbToPinky' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
-		toggleMouse()
-	end
 	
-	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == 'www.netflix.com' and platform == 'Windows' then
+	if pose == 'thumbToPinky' and edge == 'on' and chromeOpen == true and currentAddress == 'www.netflix.com' and mControl == false then
+		mouseOn()
+	end
+	if pose == 'fingersSpread' and mControl == true and chromeOpen == true and currentAddress == 'www.netflix.com' then
+		mouseOff()
+	end
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == 'www.netflix.com' and mControl == false  then
 		mouseClick()
 	end
 end
@@ -74,30 +71,6 @@ function openChromeWin()
     myo.debug('End openChrome()')
 end
 
-function openChromeMac()
-    myo.debug('openChrome Mac version')
-    chromeOpen = true
-    
-    myo.keyboard("space", "press", "command")
-    wait(600)
-    myo.keyboard('backspace', 'press')
-    myo.keyboard('backspace', 'press')
-    wait(600)
-    letters = {'g', 'o','o', 'g', 'l', 'e', 'space', 'c', 'h', 'r', 'o', 'm', 'e'}
-    i = 1
-    while letters[i] ~= nil do
-        myo.keyboard(letters[i], "press")
-        i = i + 1
-    end
-
-    wait(100)
-
-    -- myo.debug('openChrome | About to press RETURN')
-    myo.keyboard("return", "press")
-    
-     wait(600)
-    -- -- myo.debug('openChrome | Return Pressed!')
-end
 
 --focus search bar alt + d
 function navNetflixWin()
@@ -129,55 +102,33 @@ function navNetflixWin()
     myo.vibrate("short")
     
     currentAddress = 'www.netflix.com'
+    
     wait(600)
     
     myo.debug('end navNetflixWin()')
+    
+    myo.keyboard('f11', "press")
+    state = 'NetflixNavigation'
+    
+    
 end
 
-function navNetflixMac()
-	myo.debug('Begin navNetflixWin()')
-	myo.keyboard('l', "press", "command") --focus on address bar
-	
-	firstP = "www"
-	lastP = "com"
-	runAddress = "netflix"
-	
-	for c in firstP:gmatch"." do
-    	 myo.keyboard(c, "press") 
-	end
-	
-	myo.keyboard("period", "press")
-	
-    for c in runAddress:gmatch"." do
-    	 myo.keyboard(c, "press") 
-	end
-	
-	myo.keyboard("period", "press")
-	
-    for c in lastP:gmatch"." do
-    	 myo.keyboard(c, "press") 
-	end
-	
-    myo.keyboard('return', "press")
-    wait(600)
-    
-    currentAddress = 'www.netflix.com'
-    wait(600)
-    
-    myo.debug('end navNetflixWin()')
-end
-
-function toggleMouse()
-	mControl = not mControl	
+function mouseOn()
+	mControl = true
 	myo.controlMouse(mControl)
-	
-	if myo.mouseControlEnabled() then
-		myo.debug("mouse control is true")
-	else
-		myo.debug("mouse control is false")
-	end
+		myo.debug("mouse control is on")
+	state = 'mouseOn'
 	myo.vibrate("short")
 	
+end
+
+function mouseOff()
+	mControl = false
+	myo.controlMouse(mControl)
+		myo.debug("mouse control is off")
+	state = 'mouseOff'
+	myo.vibrate("short")
+	wait(3500)
 end
 
 function mouseClick()
@@ -192,4 +143,10 @@ function wait(millis) --guarantee wait of longer or equal than time given
     
     while myo.getTimeMilliseconds() - startTime < millis do
     end
+end
+
+--cell 1 is address string, 2 is chromeopen boolean, 3 is state string
+function statusCheck()
+	statusArray = { currentAddress, chromeOpen, state }
+	return statusArray
 end
