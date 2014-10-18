@@ -11,7 +11,8 @@ state = 'start'
 scrolling = false
 --gauge for scrolling
 rollDefault = nil
-
+fastForward = false
+rewind = false
 myo.debug("\n\n Connection Successful: Begin Script " .. scriptId)  --my.debug() prints to console
 
 function onPeriodic()
@@ -22,12 +23,22 @@ function onPeriodic()
 		end
 		-- the user is about to start turning
 		-- if current roll is greater than default scroll up
-		myo.debug(myo.getRoll() - rollDefault)
+		--myo.debug(myo.getRoll() - rollDefault)
 		if (myo.getRoll() - rollDefault) > 0.3 then
 			myo.keyboard('down_arrow', 'press')
 		elseif (myo.getRoll() - rollDefault) < -0.3 then
 			myo.keyboard('up_arrow', 'press')
 		end
+		if fastForward then
+			myo.keyboard('left_shift', 'down')
+			myo.keyboard('right_arrow', 'press')
+			myo.keyboard('left_shift', 'up')
+		elseif rewind then
+			myo.keyboard('left_shift', 'down')
+			myo.keyboard('left_arrow', 'press')
+			myo.keyboard('left_shift', 'up')
+		end
+			
 	end
 end
 
@@ -62,24 +73,24 @@ function onPoseEdge(pose, edge)
 		elseif pose == 'fingersSpread' and edge == 'on' then
 			if scrolling then	
 				scrolling = false
+				fastForward = false
+				rewind = false
 				rollDefault = nil
 				myo.vibrate('short')
 				myo.controlMouse(true)
 			end
 		elseif pose == 'thumbToPinky' and edge == 'on' then 
 			myo.mouse('left', 'click')  
-			--state = 'video'
 		end
-	end
-	if state == 'video' then
-		if pose == 'fingerSpread' then
-			myo.mouse('left', 'click')
-			wait(500)
-			myo.keyboard('control', 'down')
-			myo.keyboard('l', 'press')
-			myo.keyboard('c', 'press')
-			myo.keyboard('f6', 'press')
-			
+		if scrolling then
+			if pose == 'waveOut' then
+				fastForward = true
+				myo.debug('fast forwarding')
+			end
+			if pose == 'waveIn' then
+				rewind = true;
+				myo.debug('rewinding')
+			end
 		end
 	end
 end
