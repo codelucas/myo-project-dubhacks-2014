@@ -30,6 +30,17 @@ function onPoseEdge(pose, edge)
 	end
 end
 
+function runNetflix()
+	myo.keyboard('alt', 'down')
+	myo.keyboard('d', 'down')
+	myo.keyboard('alt', 'up')
+	myo.keyboard('d', 'up')
+	runCmd = "www.netflix.com"
+    for c in runCmd2:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	myo.keyboard('return', "press")
+end
 
 function openChromeWin()
     myo.debug('Begin openChrome()')
