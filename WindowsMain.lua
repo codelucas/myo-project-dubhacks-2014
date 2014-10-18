@@ -4,6 +4,7 @@ platform = 'Windows'
 --platform = 'MacOS'
 chromeOpen = false
 currentAddress = ''
+mControl = false;
 myo.debug("\n\n Connection Successful: Begin Script " .. scriptId)  --my.debug() prints to console
 
 function onPeriodic()
@@ -32,8 +33,11 @@ function onPoseEdge(pose, edge)
 	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and  platform == 'Windows' then
 		navNetflixWin()
 	end
-		if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
 		navNetflixMac()
+	end
+	if pose == 'thumbToPinky' then
+		toggleMouse()
 	end
 end
 
@@ -58,7 +62,8 @@ function openChromeWin()
     for c in runChrm:gmatch"." do
     	 myo.keyboard(c, "press") 
 	end
-      myo.keyboard('return', "press")
+    myo.keyboard('return', "press")
+    myo.vibrate("medium")
     wait(600)
    
     myo.debug('End openChrome()')
@@ -80,10 +85,12 @@ function openChromeMac()
         i = i + 1
     end
 
-    wait(600)
+    wait(100)
 
     -- myo.debug('openChrome | About to press RETURN')
     myo.keyboard("return", "press")
+    
+     wait(600)
     -- -- myo.debug('openChrome | Return Pressed!')
 end
 
@@ -114,8 +121,10 @@ function navNetflixWin()
 	
     myo.keyboard('return', "press")
     wait(600)
+    myo.vibrate("medium")
     
     currentAddress = 'www.netflix.com'
+    wait(600)
     
     myo.debug('end navNetflixWin()')
 end
@@ -148,8 +157,27 @@ function navNetflixMac()
     wait(600)
     
     currentAddress = 'www.netflix.com'
+    wait(600)
     
     myo.debug('end navNetflixWin()')
+end
+
+function toggleMouse()
+	if mControl == true then
+		mControl = false
+	else 
+		mControl = true;
+	end	
+	
+	myo.controlMouse(mControl)
+	
+	if myo.mouseControlEnabled() then
+		myo.debug("mouse control is true")
+	else
+		myo.debug("mouse control is false")
+	end
+	myo.vibrate("medium")
+	--myo.centerMousePosition()
 end
 
 
