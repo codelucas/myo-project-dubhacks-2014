@@ -65,12 +65,14 @@ function openChromeWin()
 end
 
 function openChromeMac()
-    -- myo.debug('openChrome | attempting to write space-command')
+    myo.debug('openChrome Mac version')
+    chromeOpen = true
+    
     myo.keyboard("space", "press", "command")
-    wait(100)
+    wait(600)
     myo.keyboard('backspace', 'press')
     myo.keyboard('backspace', 'press')
-    wait(100)
+    wait(600)
     letters = {'g', 'o','o', 'g', 'l', 'e', 'space', 'c', 'h', 'r', 'o', 'm', 'e'}
     i = 1
     while letters[i] ~= nil do
@@ -78,7 +80,7 @@ function openChromeMac()
         i = i + 1
     end
 
-    wait(200)
+    wait(600)
 
     -- myo.debug('openChrome | About to press RETURN')
     myo.keyboard("return", "press")
