@@ -2,7 +2,8 @@ scriptId = 'com.thalmic.jprange.displayinfo'
  --Specify OS for scripting dependencies format is either 'MacOS' or 'Windows'
 platform = 'Windows' 
 --platform = 'MacOS'
-listen = true
+chromeOpen = false
+currentAddress = ''
 myo.debug("\n\n Connection Successful: Begin Script " .. scriptId)  --my.debug() prints to console
 
 function onPeriodic()
@@ -22,34 +23,29 @@ function onActiveChange(isActive)
 end
 
 function onPoseEdge(pose, edge)
-	if pose == 'fist' and platform == 'Windows' and listen then
+	if pose == 'fist' and platform == 'Windows' and chromeOpen == false then
 		openChromeWin() 
 	end
-	if pose == 'fist' and platform == 'MacOS' and listen then
+	if pose == 'fist' and platform == 'MacOS' and chromeOpen == false then
 		openChromeMac() 
+	end
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and  platform == 'Windows' then
+		navNetflixWin()
+	end
+		if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
+		navNetflixMac()
 	end
 end
 
-function runNetflix()
-	myo.keyboard('alt', 'down')
-	myo.keyboard('d', 'down')
-	myo.keyboard('alt', 'up')
-	myo.keyboard('d', 'up')
-	runCmd = "www.netflix.com"
-    for c in runCmd2:gmatch"." do
-    	 myo.keyboard(c, "press") 
-	end
-	myo.keyboard('return', "press")
-end
 
 function openChromeWin()
     myo.debug('Begin openChrome()')
-    listen = false
+    chromeOpen = true
     
     myo.keyboard('left_win', "press")
     wait(600)
     
-    myo.debug('Type Run')
+   
     runCmd = "run"
     for c in runCmd:gmatch"." do
     	 myo.keyboard(c, "press") 
@@ -57,7 +53,7 @@ function openChromeWin()
     myo.keyboard('return', "press")
     wait(600)
     
-    myo.debug('Type Chrome')
+   
     runChrm = "chrome"
     for c in runChrm:gmatch"." do
     	 myo.keyboard(c, "press") 
@@ -87,6 +83,71 @@ function openChromeMac()
     -- myo.debug('openChrome | About to press RETURN')
     myo.keyboard("return", "press")
     -- -- myo.debug('openChrome | Return Pressed!')
+end
+
+--focus search bar alt + d
+function navNetflixWin()
+	myo.debug('Begin navNetflixWin()')
+	myo.keyboard('d', "press", "alt") --focus on address bar
+	
+	firstP = "www"
+	lastP = "com"
+	runAddress = "netflix"
+	
+	for c in firstP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in runAddress:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in lastP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+    myo.keyboard('return', "press")
+    wait(600)
+    
+    currentAddress = 'www.netflix.com'
+    
+    myo.debug('end navNetflixWin()')
+end
+
+function navNetflixMac()
+	myo.debug('Begin navNetflixWin()')
+	myo.keyboard('l', "press", "command") --focus on address bar
+	
+	firstP = "www"
+	lastP = "com"
+	runAddress = "netflix"
+	
+	for c in firstP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in runAddress:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in lastP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+    myo.keyboard('return', "press")
+    wait(600)
+    
+    currentAddress = 'www.netflix.com'
+    
+    myo.debug('end navNetflixWin()')
 end
 
 
