@@ -29,22 +29,14 @@ function onPoseEdge(pose, edge)
 	if pose == 'fist' and platform == 'MacOS' and chromeOpen == false then
 		openChromeMac() 
 	end
-	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' then
+	if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and  platform == 'Windows' then
 		navNetflixWin()
+	end
+		if pose == 'fingersSpread' and chromeOpen == true and currentAddress == '' and platform == 'MacOS' then
+		navNetflixMac()
 	end
 end
 
-function runNetflix()
-	myo.keyboard('alt', 'down')
-	myo.keyboard('d', 'down')
-	myo.keyboard('alt', 'up')
-	myo.keyboard('d', 'up')
-	runCmd = "www.netflix.com"
-    for c in runCmd2:gmatch"." do
-    	 myo.keyboard(c, "press") 
-	end
-	myo.keyboard('return', "press")
-end
 
 function openChromeWin()
     myo.debug('Begin openChrome()')
@@ -96,8 +88,40 @@ end
 --focus search bar alt + d
 function navNetflixWin()
 	myo.debug('Begin navNetflixWin()')
-	myo.keyboard('d', "press", "alt")
-	--focus on address bar
+	myo.keyboard('d', "press", "alt") --focus on address bar
+	
+	firstP = "www"
+	lastP = "com"
+	runAddress = "netflix"
+	
+	for c in firstP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in runAddress:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+	myo.keyboard("period", "press")
+	
+    for c in lastP:gmatch"." do
+    	 myo.keyboard(c, "press") 
+	end
+	
+    myo.keyboard('return', "press")
+    wait(600)
+    
+    currentAddress = 'www.netflix.com'
+    
+    myo.debug('end navNetflixWin()')
+end
+
+function navNetflixMac()
+	myo.debug('Begin navNetflixWin()')
+	myo.keyboard('l', "press", "command") --focus on address bar
+	
 	firstP = "www"
 	lastP = "com"
 	runAddress = "netflix"
