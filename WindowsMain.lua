@@ -65,10 +65,10 @@ function onPoseEdge(pose, edge)
 				rollDefault = nil
 				myo.vibrate('short')
 				myo.controlMouse(true)
-			else
-				--myo.mouse('left', 'press')
-				--state = 'video'
 			end
+		elseif pose == 'thumbToPinky' and edge == 'on' then 
+			myo.mouse('left', 'click')  
+			--state = 'video'
 		end
 	end
 	if state == 'video' then
@@ -112,6 +112,7 @@ end
 function navNetflixWin()
 	myo.debug('Begin navNetflixWin()')
 	myo.keyboard('d', "press", "alt") --focus on address bar
+	wait(200)
 	firstP = "www"
 	lastP = "com"
 	runAddress = "netflix"
